@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContentCard from "../../components/ContentCard.astro";
+import { sections } from "../../config";
+
+export function getStaticPaths() {
+  return sections.map((section) => ({ params: { section: section.slug }, props: { section } }));
+}
+
+const { section } = Astro.props;
+const entries = (await getCollection("articles", ({ data }) => data.section === section.slug))
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
+---
+<BaseLayout title={section.label} description={section.description}><section class="page-hero"><div class="container"><p class="eyebrow">Bible Nexus</p><h1>{section.label}</h1><p>{section.description}</p></div></section><section class="section"><div class="container"><div class="card-grid">{entries.map(entry=><ContentCard entry={entry}/>)}</div></div></section></BaseLayout>
