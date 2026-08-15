@@ -78,11 +78,11 @@ The goal is not to force a dramatic experience of peace. It is to stop fighting 
 
 Morning may bring the same unresolved issue. It will also bring new light, possible help, and the opportunity for a real next step. You do not have to take that step in the dark.
 
-## For remembering tonight
+## For remembering today
 
 **I do not have to solve tomorrow before I am allowed to rest.**
 
-## Night prayer
+## Prayer
 
 Father, You know every thought that keeps returning. I place each person, decision, and unfinished task in Your care. Show me what to do when morning comes, but release me from trying to do it now. Quiet my body and guard my mind with the truth of Your love. Help me receive practical care when I need it. If sleep is slow, remain close and keep me from fear. I lie down as Your beloved child. Amen.
 

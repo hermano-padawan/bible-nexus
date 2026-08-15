@@ -90,7 +90,7 @@ Tomorrow may look different. You do not need to repeat every step perfectly. Com
 
 **I do not enter this day alone; God’s mercy is already here.**
 
-## Morning prayer
+## Prayer
 
 Father, thank You for this new day. Before tasks and worries take my attention, I turn toward You. Speak through Your Word and show me what faithfulness looks like today. Give me patience for interruptions, courage for difficult work, and kindness toward the people I meet. Forgive yesterday’s failures and keep me from carrying tomorrow too soon. Lead me in what I expect and what I cannot foresee. Amen.
 

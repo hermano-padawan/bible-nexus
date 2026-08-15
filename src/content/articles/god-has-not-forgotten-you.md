@@ -88,7 +88,7 @@ God has not misplaced your name. He has not overlooked your tears. Even here, yo
 
 Bring God the truth. Receive help. Take today’s step. Then leave room for hope, even if it is only a small light for now.
 
-## A prayer while you wait
+## Prayer
 
 Father, You know how long I have waited and how tired my heart has become. I do not understand Your silence, but I bring my questions to You. Remind me that I am seen. Give me wisdom for what I can do today and patience for what I cannot control. Send trustworthy people to walk beside me. Hold me when my faith feels small. In Jesus’ name, amen.
 
