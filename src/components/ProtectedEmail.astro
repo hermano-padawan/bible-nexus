@@ -1,0 +1,8 @@
+<button class="protected-email" type="button" data-protected-email>Show email address</button>
+<script>
+  const codes=[98,105,98,108,101,110,101,120,117,115,64,97,116,111,109,105,99,109,97,105,108,46,105,111];
+  document.querySelectorAll<HTMLButtonElement>("[data-protected-email]").forEach(button=>button.addEventListener("click",()=>{
+    const address=String.fromCharCode(...codes);const link=document.createElement("a");link.href=`mailto:${address}`;link.textContent=address;link.className="protected-email-link";button.replaceWith(link);
+  }));
+</script>
+<style>.protected-email{padding:0;color:var(--dark);background:none;border:0;font:inherit;text-decoration:underline;text-underline-offset:.18em;cursor:pointer}:global(.protected-email-link){color:var(--dark)}</style>
