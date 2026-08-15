@@ -1,0 +1,26 @@
+---
+const sequences = [
+  ["Creation",["God creates light","God separates sea and sky","God forms the land","God rests on the seventh day"]],
+  ["Noah",["God warns Noah","Noah builds the ark","The flood comes","The rainbow is given"]],
+  ["Abraham",["God calls Abram","Abram travels to Canaan","Isaac is born","Abraham is tested"]],
+  ["Joseph",["Joseph receives dreams","His brothers sell him","He interprets Pharaoh's dreams","He welcomes his family in Egypt"]],
+  ["The exodus",["God calls Moses","The plagues strike Egypt","Israel crosses the sea","The covenant is given at Sinai"]],
+  ["David",["Samuel anoints David","David defeats Goliath","David becomes king","David prepares for the temple"]],
+  ["Elijah",["Elijah announces drought","Ravens bring him food","God answers on Mount Carmel","Elijah hears the quiet voice"]],
+  ["Jesus' final week",["Jesus enters Jerusalem","Jesus shares the Last Supper","Jesus is crucified","The tomb is found empty"]],
+  ["Paul",["Saul persecutes the church","Jesus meets him on the Damascus road","Barnabas welcomes him","Paul begins missionary journeys"]],
+  ["Acts",["Jesus ascends","The Spirit comes at Pentecost","Stephen bears witness","The gospel reaches Gentiles"]],
+] as const;
+---
+<section class="sequence" data-sequence>
+  <div class="quiz-status"><span data-sequence-progress>Story 1 of {sequences.length}</span><strong data-sequence-score>0 correct</strong></div>
+  <article class="quiz-card" data-sequence-card><p class="eyebrow">Put the story in order</p><h2 data-sequence-title></h2><div class="quiz-answers" data-sequence-options></div><div class="quiz-feedback" data-sequence-feedback hidden><p data-sequence-copy></p><button type="button" data-sequence-next>Next story</button></div></article>
+  <article class="quiz-result" data-sequence-result hidden><p class="eyebrow">Final result</p><strong data-sequence-final></strong><h2>You rebuilt the timeline</h2><button type="button" data-sequence-retry>Play again</button></article>
+</section>
+<script is:inline type="application/json" data-sequences set:html={JSON.stringify(sequences)}></script>
+<script>
+  const sequenceRoot=document.querySelector<HTMLElement>("[data-sequence]");const sequenceSource=document.querySelector<HTMLScriptElement>("[data-sequences]");
+  if(sequenceRoot&&sequenceSource){const stories=JSON.parse(sequenceSource.textContent||"[]") as [string,string[]][];let current=0,score=0,picked:string[]=[];const one=<T extends Element>(s:string)=>sequenceRoot.querySelector<T>(s);const set=(s:string,v:string)=>{const e=one<HTMLElement>(s);if(e)e.textContent=v};const shuffle=<T,>(a:T[])=>a.map(v=>({v,n:Math.random()})).sort((x,y)=>x.n-y.n).map(x=>x.v);
+  const render=()=>{picked=[];const [title,events]=stories[current];set("[data-sequence-progress]",`Story ${current+1} of ${stories.length}`);set("[data-sequence-score]",`${score} correct`);set("[data-sequence-title]",title);const feedback=one<HTMLElement>("[data-sequence-feedback]");if(feedback)feedback.hidden=true;const box=one<HTMLElement>("[data-sequence-options]")!;box.innerHTML="";shuffle([...events]).forEach(event=>{const b=document.createElement("button");b.type="button";b.textContent=event;b.addEventListener("click",()=>{if(b.disabled)return;picked.push(event);b.disabled=true;b.dataset.order=String(picked.length);if(picked.length===events.length){const ok=events.every((v,i)=>picked[i]===v);if(ok)score++;set("[data-sequence-copy]",ok?"Correct—the events are in order.":`The correct order is: ${events.join(" → ")}.`);feedback!.hidden=false}});box.append(b)})};
+  one<HTMLButtonElement>("[data-sequence-next]")?.addEventListener("click",()=>{current++;if(current<stories.length)render();else{one<HTMLElement>("[data-sequence-card]")!.hidden=true;one<HTMLElement>("[data-sequence-result]")!.hidden=false;set("[data-sequence-final]",`${score}/${stories.length}`)}});one<HTMLButtonElement>("[data-sequence-retry]")?.addEventListener("click",()=>{current=0;score=0;one<HTMLElement>("[data-sequence-result]")!.hidden=true;one<HTMLElement>("[data-sequence-card]")!.hidden=false;render()});render()}
+</script>

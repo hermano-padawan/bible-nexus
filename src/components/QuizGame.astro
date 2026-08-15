@@ -1,0 +1,59 @@
+---
+import type { QuizGameDefinition } from "../data/games";
+const { game } = Astro.props as { game: QuizGameDefinition };
+---
+<section class="quiz" data-quiz data-storage-key={`bible-nexus-${game.slug}`}>
+  <div class="quiz-levels" aria-label="Choose difficulty">
+    <button type="button" data-level="easy">Easy</button>
+    <button type="button" data-level="medium" class="active">Medium</button>
+    <button type="button" data-level="hard">Hard</button>
+  </div>
+  <div class="quiz-status"><span data-progress>Question 1 of {game.questions.length}</span><em data-timer hidden></em><strong data-best></strong></div>
+  <div class="quiz-track" aria-hidden="true"><span data-track></span></div>
+  <article class="quiz-card" data-card>
+    <p class="eyebrow" data-level-label>Medium</p>
+    <h2 data-question>{game.questions[0][0]}</h2>
+    <div class="quiz-answers" data-answers></div>
+    <div class="quiz-feedback" data-feedback hidden><p data-explanation></p><button type="button" data-next>Next question</button></div>
+  </article>
+  <article class="quiz-result" data-result hidden tabindex="-1">
+    <p class="eyebrow">Your result</p><strong data-score>0/10</strong><h2 data-result-title></h2><p data-result-copy></p>
+    <div><button type="button" data-retry>Play again</button><button type="button" data-share>Share result</button></div>
+  </article>
+</section>
+<script is:inline type="application/json" data-quiz-data set:html={JSON.stringify(game.questions)}></script>
+<script>
+  type Question=[string,string[],number,string];
+  const root=document.querySelector<HTMLElement>("[data-quiz]");
+  const source=document.querySelector<HTMLScriptElement>("[data-quiz-data]");
+  if(root&&source){
+    const original=JSON.parse(source.textContent||"[]") as Question[];
+    let questions:Question[]=[],current=0,score=0,locked=false,level="medium",timer=0,timerId=0;
+    const one=<T extends Element>(s:string)=>root.querySelector<T>(s);
+    const shuffle=<T,>(items:T[])=>items.map(value=>({value,sort:Math.random()})).sort((a,b)=>a.sort-b.sort).map(({value})=>value);
+    const set=(s:string,value:string)=>{const el=one<HTMLElement>(s);if(el)el.textContent=value};
+    const stopTimer=()=>{if(timerId)window.clearInterval(timerId);timerId=0};
+    const render=()=>{
+      const item=questions[current];locked=false;
+      set("[data-progress]",`Question ${current+1} of ${questions.length}`);set("[data-level-label]",level[0].toUpperCase()+level.slice(1));set("[data-question]",item[0]);
+      const track=one<HTMLElement>("[data-track]");if(track)track.style.width=`${current/questions.length*100}%`;
+      const feedback=one<HTMLElement>("[data-feedback]");if(feedback)feedback.hidden=true;
+      const holder=one<HTMLElement>("[data-answers]");if(!holder)return;holder.innerHTML="";
+      let indexed=item[1].map((answer,index)=>({answer,index}));if(level==="easy"&&indexed.length>2){const wrong=indexed.find(x=>x.index!==item[2]);indexed=[indexed[item[2]],wrong!]}indexed=shuffle(indexed);
+      indexed.forEach(({answer,index})=>{const button=document.createElement("button");button.type="button";button.textContent=answer;button.addEventListener("click",()=>choose(button,index));holder.append(button)});
+      stopTimer();const timerElement=one<HTMLElement>("[data-timer]");if(timerElement)timerElement.hidden=level!=="hard";if(level==="hard"){timer=15;set("[data-timer]",`${timer}s`);timerId=window.setInterval(()=>{timer--;set("[data-timer]",`${timer}s`);if(timer<=0){stopTimer();choose(null,-1)}},1000)}
+    };
+    const choose=(button:HTMLButtonElement|null,index:number)=>{
+      if(locked)return;locked=true;stopTimer();const item=questions[current];const correct=index===item[2];if(correct)score++;
+      root.querySelectorAll<HTMLButtonElement>("[data-answers] button").forEach((candidate)=>{candidate.disabled=true;const answerIndex=item[1].indexOf(candidate.textContent||"");if(answerIndex===item[2])candidate.classList.add("correct")});if(!correct&&button)button.classList.add("wrong");
+      set("[data-explanation]",`${correct?"Correct.":"Not quite."} ${item[3]}`);const feedback=one<HTMLElement>("[data-feedback]");if(feedback)feedback.hidden=false;
+    };
+    const finish=()=>{one<HTMLElement>("[data-card]")!.hidden=true;const result=one<HTMLElement>("[data-result]")!;result.hidden=false;const normalized=Math.round(score/questions.length*10);set("[data-score]",`${normalized}/10`);set("[data-result-title]",normalized>=9?"Excellent work":normalized>=7?"A strong result":normalized>=5?"A good beginning":"Keep exploring Scripture");set("[data-result-copy]",`You answered ${score} of ${questions.length} correctly on ${level} difficulty.`);const key=root.dataset.storageKey||"bible-nexus-quiz";const best=Math.max(normalized,Number(localStorage.getItem(key)||0));localStorage.setItem(key,String(best));set("[data-best]",`Best: ${best}/10`);result.focus()};
+    const start=(nextLevel=level)=>{level=nextLevel;questions=shuffle([...original]);current=0;score=0;one<HTMLElement>("[data-result]")!.hidden=true;one<HTMLElement>("[data-card]")!.hidden=false;root.querySelectorAll("[data-level]").forEach(el=>el.classList.toggle("active",(el as HTMLElement).dataset.level===level));render()};
+    one<HTMLButtonElement>("[data-next]")?.addEventListener("click",()=>{current++;current>=questions.length?finish():render()});
+    one<HTMLButtonElement>("[data-retry]")?.addEventListener("click",()=>start());
+    one<HTMLButtonElement>("[data-share]")?.addEventListener("click",async()=>{const text=`I scored ${Math.round(score/questions.length*10)}/10 on ${document.title}.`;if(navigator.share)await navigator.share({title:document.title,text,url:location.href});else await navigator.clipboard.writeText(`${text} ${location.href}`)});
+    root.querySelectorAll<HTMLButtonElement>("[data-level]").forEach(button=>button.addEventListener("click",()=>start(button.dataset.level||"medium")));
+    const stored=Number(localStorage.getItem(root.dataset.storageKey||"")||0);if(stored)set("[data-best]",`Best: ${stored}/10`);start(new URLSearchParams(location.search).get("level")||"medium");
+  }
+</script>

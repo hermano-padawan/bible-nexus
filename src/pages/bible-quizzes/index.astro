@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { quizGames } from "../../data/games";
+import { withBase } from "../../config";
+const specialGames=[
+  {slug:"put-the-bible-story-in-order",title:"Put the Bible Story in Order",description:"Reconstruct ten biblical timelines, one event at a time.",label:"Sequence game"},
+  {slug:"which-bible-character-are-you",title:"Which Bible Character Are You?",description:"A lighthearted reflection on courage, wisdom, perseverance, and fresh starts.",label:"Personality game"},
+];
+---
+<BaseLayout title="Bible Quizzes and Games" description="Play free Bible quizzes and interactive games about biblical characters, books, Jesus, Moses, and Scripture.">
+  <section class="page-hero quiz-heading"><div class="container"><p class="eyebrow">Learn by playing</p><h1>Bible Quizzes and Games</h1><p>Choose a topic, test what you remember, and learn from every answer. Scores are for fun; Scripture is worth exploring at any level.</p></div></section>
+  <section class="section"><div class="container"><div class="games-grid">
+    {quizGames.map(game=><a class="game-tile" href={withBase(`/bible-quizzes/${game.slug}/`)}><span>Quiz · 3 levels</span><h2>{game.title}</h2><p>{game.description}</p><strong>Play quiz →</strong></a>)}
+    {specialGames.map(game=><a class="game-tile special" href={withBase(`/bible-quizzes/${game.slug}/`)}><span>{game.label}</span><h2>{game.title}</h2><p>{game.description}</p><strong>Play game →</strong></a>)}
+  </div></div></section>
+</BaseLayout>

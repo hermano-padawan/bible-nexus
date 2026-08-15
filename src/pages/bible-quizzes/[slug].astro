@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import QuizGame from "../../components/QuizGame.astro";
+import SequenceGame from "../../components/SequenceGame.astro";
+import PersonalityGame from "../../components/PersonalityGame.astro";
+import { quizGames, type QuizGameDefinition } from "../../data/games";
+import { withBase } from "../../config";
+type PageProps={kind:"quiz";game:QuizGameDefinition}|{kind:"sequence"}|{kind:"personality"};
+export function getStaticPaths(){return [
+  ...quizGames.map(game=>({params:{slug:game.slug},props:{kind:"quiz" as const,game}})),
+  {params:{slug:"put-the-bible-story-in-order"},props:{kind:"sequence" as const}},
+  {params:{slug:"which-bible-character-are-you"},props:{kind:"personality" as const}},
+]}
+const props=Astro.props as PageProps;
+const title=props.kind==="quiz"?props.game.title:props.kind==="sequence"?"Put the Bible Story in Order":"Which Bible Character Are You?";
+const description=props.kind==="quiz"?props.game.description:props.kind==="sequence"?"Arrange events from ten Bible stories in their correct sequence.":"Answer ten reflective questions and discover which of four Bible characters most resembles your choices.";
+---
+<BaseLayout title={title} description={description}>
+  <header class="game-hero"><div class="container"><a href={withBase("/bible-quizzes/")}>Bible Quizzes</a><p>{props.kind==="quiz"?"Interactive Bible quiz":props.kind==="sequence"?"Sequence game":"Reflective game"}</p><h1>{title}</h1><span>{description}</span></div></header>
+  <main class="game-main">
+    {props.kind==="quiz"?<QuizGame game={props.game}/>:props.kind==="sequence"?<SequenceGame/>:<PersonalityGame/>}
+    <section class="game-context">
+      {props.kind==="quiz"?<><h2>Learn as you play</h2><p>Every answer includes a short explanation so that a missed question becomes an invitation to look again. The quiz is designed for learning, not for measuring anyone's faith or spiritual maturity.</p></>:props.kind==="sequence"?<><h2>Reconstruct the timeline</h2><p>This game uses broad narrative sequences rather than exact dates. Its purpose is to help you recognize the movement of biblical stories and remember how their major events connect.</p></>:<><h2>A lighthearted comparison</h2><p>This result compares your choices with selected qualities in four biblical narratives. It is not a psychological profile, a spiritual diagnosis, or a claim that complex people can be reduced to a few traits.</p></>}
+    </section>
+  </main>
+</BaseLayout>
