@@ -1,12 +1,12 @@
 :root {
-  --ink: #243126;
-  --muted: #617065;
-  --green: #315f49;
-  --dark: #214536;
-  --sage: #e7efe8;
-  --cream: #fbf8f0;
-  --gold: #d6a94f;
-  --line: #dbe3dc;
+  --ink: #18213f;
+  --muted: #626b86;
+  --green: #3559d6;
+  --dark: #213879;
+  --sage: #e8ecff;
+  --cream: #f4f6fc;
+  --gold: #ef6a5b;
+  --line: #d9deee;
   font-family: Inter, system-ui, sans-serif;
   color: var(--ink);
   background: var(--cream);
@@ -16,6 +16,7 @@
 }
 body {
   margin: 0;
+  background: var(--cream);
   line-height: 1.65;
 }
 a {
@@ -27,7 +28,7 @@ a {
   margin: auto;
 }
 .site-header {
-  background: #fffffff5;
+  background: #f9fafff2;
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
@@ -54,7 +55,7 @@ a {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--green);
+  background: linear-gradient(145deg, var(--green), #6d4bd4);
   color: #fff;
 }
 .main-nav {
@@ -71,16 +72,28 @@ a {
   display: none;
   margin-left: auto;
 }
-.hero,
+.hero {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(10, 19, 48, 0.88), rgba(18, 32, 76, 0.7) 58%, rgba(14, 24, 57, 0.5)),
+    url("/images/bible-nexus-hero.webp") center 58% / cover;
+  border-bottom: 3px solid var(--gold);
+  padding: 2.1rem 0;
+}
 .page-hero {
-  background: linear-gradient(120deg, #f8f4e9, #e9f1ea);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(239, 106, 91, 0.2), transparent 26rem),
+    linear-gradient(125deg, #e9edff, #f7f8fd 68%);
   border-bottom: 1px solid var(--line);
-  padding: 4.5rem 0;
+  padding: 3.25rem 0;
 }
 .hero-grid {
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
-  gap: 4rem;
+  gap: 2.5rem;
   align-items: center;
 }
 .eyebrow {
@@ -98,23 +111,43 @@ a {
   letter-spacing: -0.035em;
   margin: 0.4rem 0 1.2rem;
 }
+.hero h1 {
+  max-width: 710px;
+  margin: 0.2rem 0 0.65rem;
+  font-size: clamp(2rem, 4.5vw, 3.15rem);
+}
+.hero .eyebrow {
+  margin: 0;
+  color: #ff9b8f;
+}
 .hero-copy,
 .page-hero p {
   font-size: 1.15rem;
   color: var(--muted);
   max-width: 700px;
 }
+.hero .hero-copy {
+  margin: 0 0 0.85rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1rem;
+  line-height: 1.55;
+}
 .hero-note {
-  border-left: 4px solid var(--gold);
-  padding: 1.5rem;
+  padding: 1rem 1.15rem;
+  background: rgba(17, 28, 66, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 4px solid #ff8b7e;
+  border-radius: 0.35rem;
+  color: #fff;
+  backdrop-filter: blur(5px);
   font:
-    italic 1.3rem/1.5 Georgia,
+    italic 1.05rem/1.45 Georgia,
     serif;
 }
 .button {
   display: inline-block;
-  background: var(--green);
-  color: #fff;
+  background: var(--gold);
+  color: #101b3a;
   padding: 0.75rem 1rem;
   text-decoration: none;
   border-radius: 0.35rem;
@@ -124,7 +157,7 @@ a {
   padding: 4rem 0;
 }
 .section.alt {
-  background: #fff;
+  background: #eef1fb;
   border-block: 1px solid var(--line);
 }
 .section-head {
@@ -153,9 +186,17 @@ a {
 .content-card {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 0.55rem;
+  border-radius: 0.7rem;
   padding: 1.3rem;
   text-decoration: none;
+  box-shadow: 0 10px 28px rgba(31, 49, 105, 0.07);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.category-card:is(a):hover,
+.content-card:hover {
+  border-color: #aebbea;
+  box-shadow: 0 14px 34px rgba(31, 49, 105, 0.13);
+  transform: translateY(-2px);
 }
 .category-card h3,
 .content-card h3 {
@@ -176,7 +217,7 @@ a {
   aspect-ratio: 16 / 9;
   object-fit: cover;
   margin: -1.3rem -1.3rem 1rem;
-  border-radius: 0.55rem 0.55rem 0 0;
+  border-radius: 0.7rem 0.7rem 0 0;
 }
 .meta {
   color: var(--green);
@@ -229,8 +270,8 @@ a {
   color: var(--muted);
 }
 .site-footer {
-  background: #20382b;
-  color: #eaf1eb;
+  background: #101b3a;
+  color: #e9edff;
   padding: 3rem 0 1.5rem;
 }
 .footer-grid {
@@ -261,7 +302,7 @@ a {
     top: 72px;
     left: 0;
     right: 0;
-    background: #fff;
+    background: #f9faff;
     padding: 1rem;
     flex-direction: column;
   }
@@ -272,7 +313,8 @@ a {
     display: block;
   }
   .hero-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: 1.25rem;
   }
   .category-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -282,6 +324,23 @@ a {
   }
 }
 @media (max-width: 600px) {
+  .hero {
+    min-height: 0;
+    padding: 1.8rem 0;
+    background-position: 66% center;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-note {
+    display: none;
+  }
+  .hero h1 {
+    font-size: clamp(1.85rem, 9vw, 2.4rem);
+  }
+  .page-hero {
+    padding: 2.5rem 0;
+  }
   .category-grid,
   .card-grid,
   .footer-grid {
