@@ -1,4 +1,4 @@
 ---
-import{sectionBySlug}from"../config";const{entry}=Astro.props;const section=sectionBySlug.get(entry.data.section);
+import{sectionBySlug,withBase}from"../config";const{entry}=Astro.props;const section=sectionBySlug.get(entry.data.section);
 ---
-<a class="content-card" href={`/${entry.data.section}/${entry.id}/`}><span class="meta">{section?.label}</span><h3>{entry.data.title}</h3><p>{entry.data.description}</p></a>
+<a class="content-card" href={withBase(`/${entry.data.section}/${entry.id}/`)}>{entry.data.image&&<img src={withBase(entry.data.image)} alt="" width="1200" height="675" loading="lazy"/>}<span class="meta">{section?.label}</span><h3>{entry.data.title}</h3><p>{entry.data.description}</p></a>

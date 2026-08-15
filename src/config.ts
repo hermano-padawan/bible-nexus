@@ -1,4 +1,4 @@
-export const site={name:"Bible Nexus",url:"https://biblenexus.site",description:"Simple, hopeful Bible messages, prayers, devotionals, sermons, and studies for everyday life.",bibleTranslation:"World English Bible (public domain)"} as const;
+export const site={name:"Bible Nexus",url:import.meta.env.SITE,description:"Simple, hopeful Bible messages, prayers, devotionals, sermons, and studies for everyday life.",bibleTranslation:"World English Bible (public domain)"} as const;
 export const sections=[
 {slug:"sermons",label:"Sermons",description:"Warm Bible messages for the days when you need faith, courage, and hope."},
 {slug:"devotionals",label:"Devotionals",description:"Quiet moments with God for busy mornings, tired evenings, and ordinary days."},
@@ -10,4 +10,10 @@ export const sections=[
 {slug:"bible-dictionary",label:"Bible Dictionary",description:"Plain-English explanations of important Bible words, ideas, places, and practices."}] as const;
 export type SectionSlug=(typeof sections)[number]["slug"];
 export const sectionBySlug=new Map(sections.map(s=>[s.slug,s]));
-export const absoluteUrl=(path:string)=>new URL(path,site.url).toString();
+const basePath=import.meta.env.BASE_URL;
+export const withBase=(path="/")=>{
+  const normalized=`/${path.replace(/^\/+/,"")}`;
+  if(basePath!=="/"&&(normalized===basePath.slice(0,-1)||normalized.startsWith(basePath)))return normalized;
+  return `${basePath}${normalized.slice(1)}`;
+};
+export const absoluteUrl=(path:string)=>new URL(withBase(path),site.url).toString();

@@ -1,20 +1,20 @@
 ---
 import "../styles/global.css";
-import { absoluteUrl, sections, site } from "../config";
-const { title, description=site.description, canonical=Astro.url.pathname, type="website", spanishEquivalent } = Astro.props;
+import { absoluteUrl, sections, site, withBase } from "../config";
+const { title, description=site.description, canonical=Astro.url.pathname, type="website", spanishEquivalent, image="/og.png", imageAlt="Bible Nexus — Hope for today. Truth you can hold on to." } = Astro.props;
 const pageTitle=title?`${title} | ${site.name}`:"Bible Nexus | Hope and Bible Help for Everyday Life";
 const canonicalUrl=absoluteUrl(canonical);
-const schema={"@context":"https://schema.org","@type":"WebSite",name:site.name,url:site.url,description:site.description,inLanguage:"en-US"};
+const schema={"@context":"https://schema.org","@type":"WebSite",name:site.name,url:absoluteUrl("/"),description:site.description,inLanguage:"en-US"};
 ---
 <!doctype html><html lang="en"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{pageTitle}</title><meta name="description" content={description}/>
-<link rel="canonical" href={canonicalUrl}/><link rel="alternate" hreflang="en" href={canonicalUrl}/>{spanishEquivalent&&<link rel="alternate" hreflang="es" href={spanishEquivalent}/>} 
-<meta property="og:type" content={type}/><meta property="og:site_name" content={site.name}/><meta property="og:title" content={pageTitle}/><meta property="og:description" content={description}/><meta property="og:url" content={canonicalUrl}/><meta property="og:image" content={absoluteUrl("/og.png")}/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content="Bible Nexus — Hope for today. Truth you can hold on to."/>
-<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content={absoluteUrl("/og.png")}/>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="icon" href="/favicon-48x48.png" sizes="48x48" type="image/png"/><link rel="icon" href="/favicon-192x192.png" sizes="192x192" type="image/png"/>
+<link rel="canonical" href={canonicalUrl}/><link rel="alternate" hreflang="en" href={canonicalUrl}/>{spanishEquivalent&&<link rel="alternate" hreflang="es" href={spanishEquivalent}/>}<link rel="alternate" hreflang="x-default" href={canonicalUrl}/>
+<meta property="og:type" content={type}/><meta property="og:site_name" content={site.name}/><meta property="og:title" content={pageTitle}/><meta property="og:description" content={description}/><meta property="og:url" content={canonicalUrl}/><meta property="og:image" content={absoluteUrl(image)}/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="675"/><meta property="og:image:alt" content={imageAlt}/>
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content={absoluteUrl(image)}/><meta name="twitter:image:alt" content={imageAlt}/>
+<link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml"/><link rel="icon" href={withBase("/favicon-48x48.png")} sizes="48x48" type="image/png"/><link rel="icon" href={withBase("/favicon-192x192.png")} sizes="192x192" type="image/png"/>
 <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)}/></head><body>
-<header class="site-header"><div class="container nav-wrap"><a class="brand" href="/" aria-label="Bible Nexus home"><span class="brand-mark" aria-hidden="true">✦</span>Bible Nexus</a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button><nav class="main-nav" id="main-navigation" aria-label="Main navigation">{sections.map(s=><a href={`/${s.slug}/`}>{s.label}</a>)}</nav></div></header>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href={withBase()} aria-label="Bible Nexus home"><span class="brand-mark" aria-hidden="true">✦</span>Bible Nexus</a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button><nav class="main-nav" id="main-navigation" aria-label="Main navigation">{sections.map(s=><a href={withBase(`/${s.slug}/`)}>{s.label}</a>)}</nav></div></header>
 <main><slot/></main>
-<footer class="site-footer"><div class="container"><div class="footer-grid"><div><h2>Bible Nexus</h2><p>Simple words. Lasting hope. A peaceful place to read, pray, and grow in faith.</p></div><div><h3>Explore</h3>{sections.slice(0,4).map(s=><div><a href={`/${s.slug}/`}>{s.label}</a></div>)}</div><div><h3>About</h3><div><a href="/about/">About Bible Nexus</a></div><div><a href="/contact/">Contact</a></div><div><a href="/privacy/">Privacy</a></div><div><a href="/terms/">Terms</a></div></div></div><div class="footer-bottom">© {new Date().getFullYear()} Bible Nexus</div></div></footer>
+<footer class="site-footer"><div class="container"><div class="footer-grid"><div><h2>Bible Nexus</h2><p>Simple words. Lasting hope. A peaceful place to read, pray, and grow in faith.</p></div><div><h3>Explore</h3>{sections.slice(0,4).map(s=><div><a href={withBase(`/${s.slug}/`)}>{s.label}</a></div>)}</div><div><h3>About</h3><div><a href={withBase("/about/")}>About Bible Nexus</a></div><div><a href={withBase("/contact/")}>Contact</a></div><div><a href={withBase("/privacy/")}>Privacy</a></div><div><a href={withBase("/terms/")}>Terms</a></div></div></div><div class="footer-bottom">© {new Date().getFullYear()} Bible Nexus</div></div></footer>
 <script>const b=document.querySelector<HTMLButtonElement>('.nav-toggle'),n=document.querySelector('.main-nav');b?.addEventListener('click',()=>{const o=n?.classList.toggle('open')??false;b.setAttribute('aria-expanded',String(o))})</script>
 </body></html>
